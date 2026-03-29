@@ -13,16 +13,18 @@ import (
 )
 
 // arpScan discovers devices on the local network via ARP ping.
-func arpScan(ctx context.Context, iface *net.Interface) []*Device {
+// Returns found devices and a list of IPs with duplicate MAC responses.
+func arpScan(ctx context.Context, iface *net.Interface) ([]*Device, []string) {
 	cidr := localCIDR(iface)
 	if cidr == "" {
 		log.Printf("arpScan: could not determine local CIDR")
-		return nil
+		return nil, nil
 	}
 	log.Printf("arpScan: scanning %s", cidr)
 
 	hosts := hostsInCIDR(cidr)
 	results := make([]*Device, 0, len(hosts))
+	macByIP := make(map[string][]string) // ip → list of MACs seen
 	var mu sync.Mutex
 	var wg sync.WaitGroup
 
@@ -42,21 +44,35 @@ func arpScan(ctx context.Context, iface *net.Interface) []*Device {
 				IP:  ip,
 				RTT: rtt,
 			}
-			// Try to get hostname
 			if names, err := net.LookupAddr(ip); err == nil && len(names) > 0 {
 				dev.Hostname = strings.TrimSuffix(names[0], ".")
 			}
-			// Try to get MAC from ARP cache
 			dev.MAC = macFromARP(ip)
 			dev.Vendor = vendorFromMAC(dev.MAC)
 			dev.Status = StatusOnline
 			mu.Lock()
 			results = append(results, dev)
+			if dev.MAC != "" {
+				macByIP[ip] = append(macByIP[ip], dev.MAC)
+			}
 			mu.Unlock()
 		}(ip)
 	}
 	wg.Wait()
-	return results
+
+	// Detect duplicate IPs (multiple MACs responding to same IP)
+	var dupes []string
+	for ip, macs := range macByIP {
+		if len(macs) > 1 {
+			dupes = append(dupes, ip)
+			for _, d := range results {
+				if d.IP == ip {
+					d.DuplicateIP = true
+				}
+			}
+		}
+	}
+	return results, dupes
 }
 
 func pingHost(ctx context.Context, ip string) (int64, bool) {

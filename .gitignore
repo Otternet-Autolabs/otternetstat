@@ -1,2 +1,22 @@
+# Binaries
 otternetstat
+otternetstat-linux-amd64
+otternetstat-darwin-amd64
+otternetstat-darwin-arm64
+*.exe
+
+# Runtime data
+otternetstat.json
+
+# Build artifacts
 *.tmp
+dist/
+
+# macOS
+.DS_Store
+
+# Editor
+.idea/
+.vscode/
+*.swp
+*.swo

@@ -18,55 +18,64 @@
   --red: #f05a5a;
   --orange: #f08040;
 }
+[data-theme="light"] {
+  --bg: #f0f2f7;
+  --surface: #ffffff;
+  --surface2: #e8eaf0;
+  --border: rgba(0,0,0,0.1);
+  --text: #1a1a2e;
+  --muted: #7a7a99;
+  --accent: #3a6fd8;
+  --green: #1fa862;
+  --yellow: #b08000;
+  --red: #c0303030;
+  --orange: #b06020;
+}
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  font-size: 14px;
-  min-height: 100vh;
-}
-header {
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  padding: 0 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  height: 52px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-header h1 { font-size: 1.1rem; font-weight: 700; letter-spacing: 0.04em; color: var(--accent); }
+body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 14px; min-height: 100vh; }
+header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 1.5rem; display: flex; align-items: center; gap: 1rem; height: 52px; position: sticky; top: 0; z-index: 100; flex-wrap: wrap; }
+header h1 { font-size: 1.1rem; font-weight: 700; letter-spacing: 0.04em; color: var(--accent); white-space: nowrap; }
 header h1 span { color: var(--muted); font-weight: 400; }
-#ws-status { font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; background: var(--surface2); }
+#header-sub { font-size: 0.6rem; color: var(--muted); white-space: nowrap; margin-top: -2px; text-align: center; }
+#ws-status { font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; background: var(--surface2); white-space: nowrap; }
 #ws-status.connected { color: var(--green); }
 #ws-status.disconnected { color: var(--red); }
-#last-update { font-size: 0.75rem; color: var(--muted); margin-left: auto; }
-#scan-btn {
-  background: var(--accent);
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  padding: 5px 14px;
-  font-size: 0.8rem;
-  cursor: pointer;
-  font-weight: 600;
-}
+#last-update { font-size: 0.75rem; color: var(--muted); margin-left: auto; white-space: nowrap; }
+.hdr-btn { background: var(--surface2); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 5px 12px; font-size: 0.8rem; cursor: pointer; font-weight: 500; white-space: nowrap; }
+.hdr-btn:hover { border-color: var(--accent); color: var(--accent); }
+#scan-btn { background: var(--accent); color: #fff; border: none; border-radius: 6px; padding: 5px 14px; font-size: 0.8rem; cursor: pointer; font-weight: 600; white-space: nowrap; }
 #scan-btn:hover { opacity: 0.85; }
 #scan-btn:disabled { opacity: 0.5; cursor: default; }
+#alert-btn { position: relative; }
+#alert-badge { position: absolute; top: -5px; right: -5px; background: var(--red); color: #fff; font-size: 0.62rem; border-radius: 8px; padding: 1px 5px; font-weight: 700; display: none; }
+#alert-badge.visible { display: block; }
+
+#lan-badge { font-size: 0.75rem; padding: 3px 9px; border-radius: 10px; background: var(--surface2); border: 1px solid var(--border); color: var(--muted); cursor: pointer; white-space: nowrap; user-select: none; }
+#lan-badge.verified { background: color-mix(in srgb, var(--green) 15%, transparent); border-color: var(--green); color: var(--green); }
+#lan-badge.failed { background: color-mix(in srgb, var(--red) 15%, transparent); border-color: var(--red); color: var(--red); }
 
 .main { padding: 1.5rem; display: flex; flex-direction: column; gap: 1.5rem; max-width: 1400px; margin: 0 auto; }
 
-/* Summary row */
-.summary-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1rem; }
-.stat-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 1rem 1.25rem;
-}
+/* Alerts panel */
+#alerts-wrap { display: none; }
+#alerts-wrap.open { display: flex; flex-direction: column; gap: 0.5rem; }
+.alert-item { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 0.75rem 1rem; display: flex; gap: 0.75rem; align-items: flex-start; }
+.alert-item.internet_down, .alert-item.issue_appeared { border-left: 3px solid var(--red); }
+.alert-item.internet_up, .alert-item.issue_cleared, .alert-item.device_online { border-left: 3px solid var(--green); }
+.alert-item.new_device { border-left: 3px solid var(--accent); }
+.alert-item.device_offline { border-left: 3px solid var(--orange); }
+.alert-body { flex: 1; }
+.alert-title { font-weight: 600; font-size: 0.85rem; }
+.alert-desc { color: var(--muted); font-size: 0.78rem; margin-top: 2px; }
+.alert-time { font-size: 0.7rem; color: var(--muted); flex-shrink: 0; }
+
+/* Read-only banner */
+#share-banner { display: none; background: rgba(91,141,239,0.12); border: 1px solid var(--accent); border-radius: 10px; padding: 0.75rem 1rem; color: var(--accent); font-size: 0.85rem; font-weight: 600; }
+#share-banner.visible { display: block; }
+
+/* Summary */
+.summary-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; }
+.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; }
 .stat-card .label { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.4rem; }
 .stat-card .value { font-size: 1.8rem; font-weight: 700; line-height: 1; }
 .stat-card .sub { font-size: 0.75rem; color: var(--muted); margin-top: 0.25rem; }
@@ -76,15 +85,7 @@ header h1 span { color: var(--muted); font-weight: 400; }
 
 /* Issues */
 .issues-list { display: flex; flex-direction: column; gap: 0.6rem; }
-.issue {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 0.9rem 1.1rem;
-  display: flex;
-  gap: 0.9rem;
-  align-items: flex-start;
-}
+.issue { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 0.9rem 1.1rem; display: flex; gap: 0.9rem; align-items: flex-start; }
 .issue.error { border-left: 3px solid var(--red); }
 .issue.warning { border-left: 3px solid var(--yellow); }
 .issue.info { border-left: 3px solid var(--accent); }
@@ -92,92 +93,60 @@ header h1 span { color: var(--muted); font-weight: 400; }
 .issue-body { flex: 1; }
 .issue-title { font-weight: 600; margin-bottom: 3px; }
 .issue-desc { color: var(--muted); font-size: 0.82rem; line-height: 1.45; }
-.issue-suggestion {
-  margin-top: 6px;
-  font-size: 0.8rem;
-  color: var(--accent);
-  background: rgba(91,141,239,0.08);
-  border-radius: 6px;
-  padding: 5px 8px;
-}
-.no-issues {
-  color: var(--green);
-  font-size: 0.9rem;
-  padding: 1rem;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
+.issue-suggestion { margin-top: 6px; font-size: 0.8rem; color: var(--accent); background: rgba(91,141,239,0.08); border-radius: 6px; padding: 5px 8px; }
+.no-issues { color: var(--green); font-size: 0.9rem; padding: 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; display: flex; align-items: center; gap: 0.5rem; }
 
-/* Two-column layout */
+/* Layout */
 .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-@media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; }
+@media (max-width: 1100px) { .three-col { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 900px) { .two-col, .three-col { grid-template-columns: 1fr; } }
 
 /* Panel */
-.panel {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  overflow: hidden;
-}
-.panel-header {
-  padding: 0.85rem 1.1rem;
-  border-bottom: 1px solid var(--border);
-  font-weight: 600;
-  font-size: 0.85rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
-}
-.panel-header .badge {
-  font-size: 0.7rem;
-  padding: 2px 7px;
-  border-radius: 8px;
-  background: var(--surface2);
-  color: var(--muted);
-  font-weight: 500;
-}
+.panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.panel-header { padding: 0.85rem 1.1rem; border-bottom: 1px solid var(--border); font-weight: 600; font-size: 0.85rem; display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
+.panel-header .badge { font-size: 0.7rem; padding: 2px 7px; border-radius: 8px; background: var(--surface2); color: var(--muted); font-weight: 500; }
+.collapse-btn { background: none; border: none; color: var(--muted); font-size: 0.8rem; cursor: pointer; padding: 2px 6px; border-radius: 4px; }
+.collapse-btn:hover { color: var(--text); }
 
-/* DNS / Internet table */
+/* Probe tables */
 .probe-table { width: 100%; border-collapse: collapse; }
 .probe-table td { padding: 0.65rem 1rem; border-bottom: 1px solid var(--border); font-size: 0.83rem; }
 .probe-table tr:last-child td { border-bottom: none; }
 .probe-table .name { color: var(--text); font-weight: 500; }
 .probe-table .latency { color: var(--muted); font-size: 0.78rem; text-align: right; }
-.dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+.dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; flex-shrink: 0; }
 .dot.ok { background: var(--green); }
 .dot.fail { background: var(--red); }
 .dot.slow { background: var(--yellow); }
+.dot.unknown { background: var(--muted); }
+.dot.info { background: var(--accent); opacity: 0.6; }
+
+/* Client diagnostics panel */
+.client-row { display: flex; align-items: center; padding: 0.65rem 1rem; border-bottom: 1px solid var(--border); font-size: 0.83rem; gap: 0.5rem; }
+.client-row:last-child { border-bottom: none; }
+.client-row .row-label { color: var(--muted); flex: 1; }
+.client-row .row-val { font-weight: 500; text-align: right; }
+.client-row .row-val.ok { color: var(--green); }
+.client-row .row-val.warn { color: var(--yellow); }
+.client-row .row-val.err { color: var(--red); }
+.client-row .row-val.muted { color: var(--muted); }
+
+/* Gateway panel */
+.port-list { display: flex; flex-wrap: wrap; gap: 6px; padding: 0.75rem 1rem; }
+.port-chip { font-size: 0.72rem; padding: 2px 8px; border-radius: 6px; font-family: monospace; font-weight: 600; }
+.port-chip.open { background: rgba(61,214,140,0.12); color: var(--green); }
+.port-chip.closed { background: var(--surface2); color: var(--muted); }
 
 /* Devices table */
 .devices-wrap { overflow-x: auto; }
 .devices-table { width: 100%; border-collapse: collapse; min-width: 600px; }
-.devices-table th {
-  text-align: left;
-  padding: 0.6rem 1rem;
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--muted);
-  border-bottom: 1px solid var(--border);
-  white-space: nowrap;
-}
+.devices-table th { text-align: left; padding: 0.6rem 1rem; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); border-bottom: 1px solid var(--border); white-space: nowrap; }
 .devices-table td { padding: 0.65rem 1rem; border-bottom: 1px solid var(--border); font-size: 0.83rem; }
 .devices-table tr:last-child td { border-bottom: none; }
-.devices-table tr:hover td { background: var(--surface2); }
-.status-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 0.72rem;
-  padding: 2px 8px;
-  border-radius: 8px;
-  font-weight: 600;
-}
+.devices-table tr:hover td { background: var(--surface2); cursor: pointer; }
+.devices-table tr.dup td { background: rgba(240,90,90,0.05); }
+.status-pill { display: inline-flex; align-items: center; gap: 4px; font-size: 0.72rem; padding: 2px 8px; border-radius: 8px; font-weight: 600; }
 .status-pill.online { background: rgba(61,214,140,0.12); color: var(--green); }
 .status-pill.lan_only { background: rgba(240,192,64,0.12); color: var(--yellow); }
 .status-pill.offline { background: rgba(240,90,90,0.1); color: var(--red); }
@@ -189,44 +158,167 @@ header h1 span { color: var(--muted); font-weight: 400; }
 .ip { font-family: monospace; color: var(--muted); font-size: 0.8rem; }
 .mac { font-family: monospace; color: var(--muted); font-size: 0.75rem; }
 .vendor { color: var(--muted); font-size: 0.78rem; }
+.bw { color: var(--accent); font-size: 0.75rem; }
+
+/* Mobile device cards */
+.device-cards { display: none; flex-direction: column; gap: 0.75rem; padding: 0.75rem; }
+.device-card { background: var(--surface2); border-radius: 10px; padding: 0.9rem 1rem; cursor: pointer; }
+.device-card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.4rem; }
+.device-card-name { font-weight: 600; font-size: 0.95rem; }
+.device-card-meta { font-size: 0.78rem; color: var(--muted); display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 0.3rem; }
+@media (max-width: 640px) {
+  header { height: auto; padding: 0.75rem 1rem; gap: 0.5rem; }
+  .devices-wrap { display: none; }
+  .device-cards { display: flex; }
+  .summary-row { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+  #dev-popover { width: 100vw !important; max-height: 100vh !important; border-radius: 16px 16px 0 0 !important; margin-top: auto !important; }
+  #dev-backdrop { align-items: flex-end !important; }
+}
 
 /* Graph */
 .graph-wrap { padding: 1rem; }
-canvas { width: 100%; border-radius: 6px; display: block; }
+.graph-wrap canvas { width: 100%; border-radius: 6px; display: block; }
+#uptime-wrap canvas { width: 100%; border-radius: 6px; display: block; }
+#topology-wrap canvas { width: 100%; border-radius: 6px; display: block; }
 
-/* Section header */
 .section-title { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 0.75rem; }
 
-/* Client probe banner */
-#client-probe {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 0.85rem 1.1rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  font-size: 0.85rem;
+@keyframes spin { to { transform: rotate(360deg); } }
+.spinner { display: inline-block; width: 10px; height: 10px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin-right: 6px; vertical-align: middle; }
+
+/* Issue log */
+.issue-log-toggle { background: none; border: none; color: var(--accent); font-size: 0.78rem; cursor: pointer; padding: 0; font-weight: 600; }
+.issue-log-toggle:hover { opacity: 0.8; }
+.issue-log-entry { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 0.75rem 1rem; display: flex; gap: 0.75rem; align-items: flex-start; }
+.issue-log-entry.cleared { opacity: 0.55; }
+.issue-log-entry.error { border-left: 3px solid var(--red); }
+.issue-log-entry.warning { border-left: 3px solid var(--yellow); }
+.issue-log-entry.info { border-left: 3px solid var(--accent); }
+.issue-log-meta { font-size: 0.72rem; color: var(--muted); margin-top: 3px; }
+.cleared-badge { font-size: 0.68rem; padding: 1px 6px; border-radius: 6px; background: rgba(61,214,140,0.1); color: var(--green); margin-left: 6px; }
+
+/* Device detail popover */
+#dev-backdrop {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+  z-index: 1100; align-items: center; justify-content: center;
 }
-#client-probe .label { color: var(--muted); }
-#client-probe .result { font-weight: 600; margin-left: auto; }
+#dev-backdrop.open { display: flex; }
+#dev-popover {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+  width: min(580px, 94vw); max-height: 88vh; overflow-y: auto;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.7); padding: 0;
+}
+#dev-popover .pop-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.1rem 1.4rem 0.9rem; border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; background: var(--surface); z-index: 1; border-radius: 16px 16px 0 0;
+}
+#dev-popover .pop-title { font-size: 1.05rem; font-weight: 700; flex: 1; margin-right: 1rem; }
+#dev-popover .pop-close {
+  background: var(--surface2); border: none; color: var(--muted); font-size: 1.1rem;
+  width: 28px; height: 28px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+#dev-popover .pop-close:hover { color: var(--text); }
+#dev-popover .pop-section {
+  padding: 0.9rem 1.4rem 0.3rem; font-size: 0.7rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted);
+}
+#dev-popover .pop-row {
+  display: flex; align-items: center; padding: 0.55rem 1.4rem;
+  border-bottom: 1px solid var(--border); font-size: 0.84rem; gap: 0.75rem;
+}
+#dev-popover .pop-row:last-child { border-bottom: none; }
+#dev-popover .pop-row .pk { color: var(--muted); min-width: 140px; flex-shrink: 0; }
+#dev-popover .pop-row .pv { font-weight: 500; font-family: monospace; word-break: break-all; }
+#dev-popover .pop-row .pv.ok { color: var(--green); font-family: inherit; }
+#dev-popover .pop-row .pv.warn { color: var(--yellow); font-family: inherit; }
+#dev-popover .pop-row .pv.err { color: var(--red); font-family: inherit; }
+#dev-popover .pop-row .pv.muted { color: var(--muted); font-family: inherit; }
+.nick-input { background: var(--surface2); border: 1px solid var(--border); color: var(--text); border-radius: 6px; padding: 4px 8px; font-size: 0.84rem; flex: 1; }
+.nick-input:focus { outline: none; border-color: var(--accent); }
+.nick-save { background: var(--accent); color: #fff; border: none; border-radius: 6px; padding: 4px 12px; font-size: 0.8rem; cursor: pointer; font-weight: 600; }
+.nick-save:hover { opacity: 0.85; }
+
+/* Topology canvas */
+#topology-canvas { display: block; }
+
+/* Topology fullscreen */
+#topo-backdrop {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+  z-index: 1000; align-items: center; justify-content: center;
+}
+#topo-backdrop.open { display: flex; }
+#topo-fullscreen {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+  width: min(98vw, 1400px); height: 90vh; display: flex; flex-direction: column;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.8);
+}
+#topo-fullscreen-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.85rem 1.1rem; border-bottom: 1px solid var(--border);
+  font-weight: 600; font-size: 0.85rem; flex-shrink: 0;
+}
+#topo-fullscreen-wrap { flex: 1; padding: 0.5rem; overflow: hidden; }
+#topology-canvas-full { display: block; }
+
+/* Uptime timeline */
+#uptime-wrap { padding: 0.75rem 1rem; }
 </style>
 </head>
 <body>
 
 <header>
-  <h1>otter<span>netstat</span></h1>
+  <div style="display:flex;flex-direction:column;gap:0">
+    <h1>otter<span>netstat</span></h1>
+  <div id="header-sub">devices and packets</div>
+  </div>
   <div id="ws-status" class="disconnected">Connecting…</div>
   <button id="scan-btn" onclick="triggerScan()">↺ Scan now</button>
+  <button class="hdr-btn" id="alert-btn" onclick="toggleAlerts()">🔔 Alerts<span id="alert-badge"></span></button>
+  <button class="hdr-btn" id="share-btn" onclick="shareSnapshot()">↗ Share</button>
+  <button class="hdr-btn" id="theme-btn" onclick="toggleTheme()" title="Toggle dark/light mode">☾</button>
+  <span id="lan-badge" onclick="toggleLAN()" title="Click to verify or revoke LAN access">? LAN</span>
   <div id="last-update"></div>
 </header>
 
-<div class="main">
+<!-- Device detail popover -->
+<div id="dev-backdrop" onclick="closeDevPopover(event)">
+  <div id="dev-popover">
+    <div class="pop-header">
+      <span class="pop-title" id="dev-pop-title">Device</span>
+      <button class="pop-close" onclick="closeDevPopover()">✕</button>
+    </div>
+    <div id="dev-pop-body"></div>
+  </div>
+</div>
 
-  <!-- Client-side internet probe -->
-  <div id="client-probe">
-    <span class="label">This device's internet:</span>
-    <span id="client-result">Testing…</span>
+<!-- Topology fullscreen -->
+<div id="topo-backdrop" onclick="closeTopoFullscreen(event)">
+  <div id="topo-fullscreen">
+    <div id="topo-fullscreen-header">
+      Network Topology
+      <button class="pop-close" onclick="closeTopoFullscreen()">✕</button>
+    </div>
+    <div id="topo-fullscreen-wrap">
+      <canvas id="topology-canvas-full"></canvas>
+    </div>
+  </div>
+</div>
+
+
+<div class="main">
+  <!-- Share banner -->
+  <div id="share-banner">📷 Read-only snapshot — data is frozen and will not update</div>
+
+  <!-- Alerts panel -->
+  <div>
+    <div id="alerts-wrap">
+      <div class="section-title" style="display:flex;align-items:center;justify-content:space-between">
+        <span>Alerts</span>
+        <button class="issue-log-toggle" onclick="toggleAlerts()">Hide</button>
+      </div>
+      <div id="alerts-list"></div>
+    </div>
   </div>
 
   <!-- Summary stats -->
@@ -234,62 +326,103 @@ canvas { width: 100%; border-radius: 6px; display: block; }
     <div class="stat-card"><div class="label">Devices online</div><div class="value" id="stat-devices">—</div></div>
     <div class="stat-card"><div class="label">Internet</div><div class="value" id="stat-internet">—</div></div>
     <div class="stat-card"><div class="label">DNS</div><div class="value" id="stat-dns">—</div></div>
-    <div class="stat-card"><div class="label">Avg latency</div><div class="value" id="stat-latency">—</div><div class="sub">LAN ping</div></div>
-    <div class="stat-card"><div class="label">Server IP</div><div class="value" style="font-size:1rem;padding-top:4px" id="stat-ip">—</div></div>
-    <div class="stat-card"><div class="label">Gateway</div><div class="value" style="font-size:1rem;padding-top:4px" id="stat-gw">—</div></div>
+    <div class="stat-card"><div class="label">Gateway</div><div class="value" id="stat-gw-status">—</div></div>
+    <div class="stat-card"><div class="label">IPv6</div><div class="value" id="stat-ipv6">—</div></div>
+    <div class="stat-card"><div class="label">Avg LAN latency</div><div class="value" id="stat-latency">—</div><div class="sub">ping</div></div>
+    <div class="stat-card"><div class="label">Server IP</div><div class="value" style="font-size:0.95rem;padding-top:6px" id="stat-ip">—</div></div>
+    <div class="stat-card"><div class="label">WAN download</div><div class="value" style="font-size:1.2rem;padding-top:6px" id="stat-wan">—</div><div class="sub">Mbps</div></div>
   </div>
 
   <!-- Issues -->
-  <div>
-    <div class="section-title">Issues & Diagnostics</div>
+  <div id="issues-panel">
+    <div class="section-title" style="display:flex;align-items:center;justify-content:space-between">
+      <span>Issues & Diagnostics</span>
+      <button class="issue-log-toggle" onclick="toggleIssueLog()">📋 Show history</button>
+    </div>
     <div class="issues-list" id="issues-list"></div>
+    <div id="issue-log-wrap" style="display:none;margin-top:1rem">
+      <div class="section-title" style="margin-bottom:0.5rem">Issue History</div>
+      <div class="issues-list" id="issue-log-list"></div>
+    </div>
   </div>
 
-  <!-- DNS + Internet probes -->
-  <div class="two-col">
+  <!-- Client diagnostics + Gateway -->
+  <div class="two-col" id="diagnostics-row">
+    <div class="panel">
+      <div class="panel-header">This Device's Connectivity <span class="badge" id="client-device-ip">detecting…</span></div>
+      <div id="client-rows"></div>
+    </div>
+    <div class="panel" id="gateway-panel-wrap">
+      <div class="panel-header">Gateway / Router</div>
+      <div id="gateway-panel"></div>
+    </div>
+  </div>
+
+  <!-- Public IP info -->
+  <div class="panel" id="public-ip-panel" style="display:none">
+    <div class="panel-header">Public IP / ISP</div>
+    <div id="public-ip-rows"></div>
+  </div>
+
+  <!-- DNS + Internet -->
+  <div class="two-col" id="dns-internet-row">
     <div class="panel">
       <div class="panel-header">DNS Resolvers</div>
       <table class="probe-table" id="dns-table"><tbody></tbody></table>
     </div>
     <div class="panel">
-      <div class="panel-header">Internet Reachability</div>
+      <div class="panel-header">Internet Reachability (server-side)</div>
       <table class="probe-table" id="internet-table"><tbody></tbody></table>
     </div>
   </div>
 
-  <!-- Latency graph -->
-  <div class="panel">
+  <!-- Topology map -->
+  <div class="panel" id="topology-panel">
     <div class="panel-header">
-      LAN Latency History
-      <span class="badge" id="graph-range">loading…</span>
+      Network Topology
+      <div style="display:flex;gap:0.4rem">
+        <button class="collapse-btn" onclick="openTopoFullscreen()" title="Expand fullscreen">⤢</button>
+        <button class="collapse-btn" onclick="toggleTopology()">▲</button>
+      </div>
     </div>
-    <div class="graph-wrap">
-      <canvas id="latency-chart" height="120"></canvas>
+    <div id="topology-wrap" style="padding:0.5rem">
+      <canvas id="topology-canvas" height="340"></canvas>
+    </div>
+  </div>
+
+  <!-- Latency graph + Uptime timeline -->
+  <div class="panel" id="latency-panel">
+    <div class="panel-header">LAN Latency History <span class="badge" id="graph-range">loading…</span></div>
+    <div class="graph-wrap"><canvas id="latency-chart" height="120"></canvas></div>
+    <div style="padding: 0 1rem 0.25rem; font-size:0.7rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em;">Uptime / Connectivity (24h)</div>
+    <div id="uptime-wrap"><canvas id="uptime-chart" height="40"></canvas></div>
+    <div id="uptime-pct" style="padding:0 1rem 0.75rem; font-size:0.78rem; color:var(--muted);"></div>
+  </div>
+
+  <!-- Traceroute -->
+  <div class="panel" id="traceroute-panel">
+    <div class="panel-header">
+      Traceroute to 8.8.8.8
+      <button class="collapse-btn" onclick="toggleTraceroute()">▲</button>
+    </div>
+    <div id="traceroute-wrap">
+      <table class="probe-table" id="traceroute-table"><tbody></tbody></table>
     </div>
   </div>
 
   <!-- Devices -->
-  <div class="panel">
-    <div class="panel-header">
-      Devices
-      <span class="badge" id="device-count">0</span>
-    </div>
+  <div class="panel" id="devices-panel">
+    <div class="panel-header">Devices <span class="badge" id="device-count">0</span></div>
     <div class="devices-wrap">
       <table class="devices-table">
-        <thead>
-          <tr>
-            <th>Status</th>
-            <th>Hostname / Name</th>
-            <th>IP Address</th>
-            <th>MAC Address</th>
-            <th>Vendor</th>
-            <th>RTT</th>
-            <th>Last seen</th>
-          </tr>
-        </thead>
+        <thead><tr>
+          <th>Status</th><th>Hostname / Name</th><th>IP Address</th>
+          <th>MAC Address</th><th>Vendor</th><th>Services</th><th>Bandwidth</th><th>RTT</th><th>Last seen</th>
+        </tr></thead>
         <tbody id="devices-tbody"></tbody>
       </table>
     </div>
+    <div class="device-cards" id="device-cards"></div>
   </div>
 
 </div>
@@ -299,26 +432,99 @@ canvas { width: 100%; border-radius: 6px; display: block; }
 let ws, reconnectDelay = 1000;
 let lastSnapshot = null;
 let historyData = [];
+let alertsVisible = false;
+let knownAlertCount = 0;
+let topoVisible = true;
+let traceVisible = true;
+const shareToken = new URLSearchParams(location.search).get('share');
+
+function setLANOnlyButtons(visible) {
+  const d = visible ? '' : 'none';
+  // Header buttons
+  document.getElementById('scan-btn').style.display = d;
+  document.getElementById('alert-btn').style.display = d;
+  document.getElementById('share-btn').style.display = d;
+  // LAN-only panels (empty without snapshot data)
+  const lanPanels = ['summary-row','issues-panel','gateway-panel-wrap','dns-internet-row',
+    'topology-panel','latency-panel','traceroute-panel','devices-panel'];
+  lanPanels.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = d;
+  });
+  // When outside LAN, client connectivity panel is alone — stretch it full width
+  const diagRow = document.getElementById('diagnostics-row');
+  if (diagRow) diagRow.style.gridTemplateColumns = visible ? '' : '1fr';
+}
+let topoNodes = []; // [{ip, cx, cy}] for click hit-testing
+
+// ── Theme ──────────────────────────────────────────────────────────────────
+function applyTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  document.getElementById('theme-btn').textContent = t === 'light' ? '☀' : '☾';
+}
+function toggleTheme() {
+  const cur = document.documentElement.getAttribute('data-theme') || 'dark';
+  const next = cur === 'dark' ? 'light' : 'dark';
+  applyTheme(next);
+  localStorage.setItem('theme', next);
+}
+applyTheme(localStorage.getItem('theme') || 'dark');
+
+// ── Share mode ─────────────────────────────────────────────────────────────
+if (shareToken) {
+  document.getElementById('share-banner').classList.add('visible');
+  document.getElementById('scan-btn').style.display = 'none';
+  document.getElementById('alert-btn').style.display = 'none';
+  document.getElementById('share-btn').style.display = 'none';
+  fetch('/api/share/' + shareToken)
+    .then(r => { if (!r.ok) throw new Error('expired'); return r.json(); })
+    .then(snap => render(snap))
+    .catch(() => { document.getElementById('share-banner').textContent = '⚠ Share link expired or not found'; });
+} else {
+  // Only connect WebSocket if we have a valid session
+  fetch('/api/snapshot').then(r => {
+    if (r.status === 401) {
+      document.getElementById('ws-status').style.display = 'none';
+      setLANOnlyButtons(false);
+    } else {
+      connect();
+    }
+  }).catch(() => connect());
+}
 
 // ── WebSocket ──────────────────────────────────────────────────────────────
 function connect() {
   ws = new WebSocket(`ws://${location.host}/ws`);
   ws.onopen = () => {
-    document.getElementById('ws-status').textContent = 'Connected';
-    document.getElementById('ws-status').className = 'connected';
+    const s = document.getElementById('ws-status');
+    s.style.display = '';
+    s.textContent = 'Connected';
+    s.className = 'connected';
     reconnectDelay = 1000;
+    setLANOnlyButtons(true);
   };
   ws.onmessage = e => {
-    try {
-      const msg = JSON.parse(e.data);
-      if (msg.type === 'snapshot') render(msg.data);
-    } catch {}
+    try { const msg = JSON.parse(e.data); if (msg.type === 'snapshot') render(msg.data); } catch {}
   };
   ws.onclose = () => {
-    document.getElementById('ws-status').textContent = 'Reconnecting…';
-    document.getElementById('ws-status').className = 'disconnected';
-    setTimeout(connect, reconnectDelay);
-    reconnectDelay = Math.min(reconnectDelay * 2, 30000);
+    // Check if the session is still valid before reconnecting.
+    // If not, show a static message rather than hammering a 401 endpoint.
+    fetch('/api/snapshot', {method:'GET'}).then(r => {
+      if (r.status === 401) {
+        document.getElementById('ws-status').style.display = 'none';
+        // Don't reconnect — proveLAN() will reload the page when verified
+      } else {
+        document.getElementById('ws-status').textContent = 'Reconnecting…';
+        document.getElementById('ws-status').className = 'disconnected';
+        setTimeout(connect, reconnectDelay);
+        reconnectDelay = Math.min(reconnectDelay * 2, 30000);
+      }
+    }).catch(() => {
+      document.getElementById('ws-status').textContent = 'Reconnecting…';
+      document.getElementById('ws-status').className = 'disconnected';
+      setTimeout(connect, reconnectDelay);
+      reconnectDelay = Math.min(reconnectDelay * 2, 30000);
+    });
   };
 }
 
@@ -327,78 +533,61 @@ function render(snap) {
   lastSnapshot = snap;
   document.getElementById('last-update').textContent = 'Updated ' + new Date().toLocaleTimeString();
 
-  // Summary
   const online = snap.devices.filter(d => d.status !== 'offline').length;
   document.getElementById('stat-devices').textContent = online;
   document.getElementById('device-count').textContent = online;
 
   const internetOk = snap.internet.some(p => p.success);
-  const statInternet = document.getElementById('stat-internet');
-  statInternet.textContent = internetOk ? '✓' : '✗';
-  statInternet.className = 'value ' + (internetOk ? 'ok' : 'err');
+  setVal('stat-internet', internetOk ? '✓' : '✗', internetOk ? 'ok' : 'err');
 
   const dnsOk = snap.dns.some(r => r.success);
-  const statDNS = document.getElementById('stat-dns');
-  statDNS.textContent = dnsOk ? '✓' : '✗';
-  statDNS.className = 'value ' + (dnsOk ? 'ok' : 'err');
+  setVal('stat-dns', dnsOk ? '✓' : '✗', dnsOk ? 'ok' : 'err');
+
+  setVal('stat-gw-status', snap.gateway_reachable ? '✓' : '✗', snap.gateway_reachable ? 'ok' : 'err');
+  setVal('stat-ipv6', snap.ipv6 ? '✓' : '✗', snap.ipv6 ? 'ok' : 'warn');
 
   const rtts = snap.devices.filter(d => d.status !== 'offline' && d.rtt_ms >= 0).map(d => d.rtt_ms);
-  const avgRtt = rtts.length ? Math.round(rtts.reduce((a, b) => a + b, 0) / rtts.length) : null;
-  const statLat = document.getElementById('stat-latency');
-  if (avgRtt !== null) {
-    statLat.textContent = avgRtt + 'ms';
-    statLat.className = 'value ' + (avgRtt < 10 ? 'ok' : avgRtt < 50 ? '' : 'warn');
-  } else {
-    statLat.textContent = '—';
-    statLat.className = 'value';
-  }
+  const avgRtt = rtts.length ? Math.round(rtts.reduce((a,b)=>a+b,0)/rtts.length) : null;
+  setVal('stat-latency', avgRtt !== null ? avgRtt+'ms' : '—', avgRtt === null ? '' : avgRtt < 10 ? 'ok' : avgRtt < 50 ? '' : 'warn');
 
   document.getElementById('stat-ip').textContent = snap.server_ip || '—';
-  document.getElementById('stat-gw').textContent = snap.gateway || '—';
 
-  // Issues
+  const wan = snap.wan_download_mbps;
+  const wanEl = document.getElementById('stat-wan');
+  if (wan && wan > 0) {
+    wanEl.textContent = wan.toFixed(0);
+    wanEl.className = 'value' + (wan >= 100 ? ' ok' : wan >= 10 ? '' : ' warn');
+  } else {
+    wanEl.textContent = '—';
+    wanEl.className = 'value';
+  }
+
+  // Alert badge
+  if (snap.alert_count && snap.alert_count > knownAlertCount) {
+    const badge = document.getElementById('alert-badge');
+    const diff = snap.alert_count - knownAlertCount;
+    badge.textContent = diff > 99 ? '99+' : diff;
+    badge.classList.add('visible');
+    knownAlertCount = snap.alert_count;
+    if (alertsVisible) fetchAlerts();
+  }
+
   renderIssues(snap.issues);
-
-  // DNS table
-  const dnsBody = document.querySelector('#dns-table tbody');
-  dnsBody.innerHTML = snap.dns.map(r => {
-    const dot = r.success ? (r.latency_ms > 200 ? 'slow' : 'ok') : 'fail';
-    return `<tr>
-      <td><span class="dot ${dot}"></span><span class="name">${esc(r.resolver)}</span></td>
-      <td class="latency">${r.success ? r.latency_ms + 'ms' : esc(r.error || 'failed')}</td>
-    </tr>`;
-  }).join('');
-
-  // Internet table
-  const intBody = document.querySelector('#internet-table tbody');
-  intBody.innerHTML = snap.internet.map(p => {
-    const dot = p.success ? 'ok' : 'fail';
-    return `<tr>
-      <td><span class="dot ${dot}"></span><span class="name">${esc(p.target)}</span> <span class="vendor">${p.method}</span></td>
-      <td class="latency">${p.success ? p.latency_ms + 'ms' : 'failed'}</td>
-    </tr>`;
-  }).join('');
-
-  // Devices
-  const tbody = document.getElementById('devices-tbody');
-  tbody.innerHTML = snap.devices.map(d => {
-    const rttClass = d.rtt_ms < 0 ? '' : d.rtt_ms < 10 ? 'fast' : d.rtt_ms < 50 ? 'slow' : 'very-slow';
-    const rttText = d.rtt_ms < 0 ? '—' : d.rtt_ms + 'ms';
-    const name = d.hostname || d.ip;
-    const isGateway = d.ip === snap.gateway;
-    return `<tr>
-      <td><span class="status-pill ${d.status}">${statusLabel(d.status)}</span></td>
-      <td><span class="hostname">${esc(name)}${isGateway ? ' <span style="color:var(--accent);font-size:0.7rem">router</span>' : ''}</span></td>
-      <td><span class="ip">${esc(d.ip)}</span></td>
-      <td><span class="mac">${esc(d.mac || '—')}</span></td>
-      <td><span class="vendor">${esc(d.vendor || '—')}</span></td>
-      <td><span class="rtt ${rttClass}">${rttText}</span></td>
-      <td><span class="vendor">${timeAgo(d.last_seen)}</span></td>
-    </tr>`;
-  }).join('');
-
-  // Fetch history and draw graph
+  if (issueLogVisible) fetchIssueLog();
+  renderGateway(snap);
+  renderPublicIP(snap.public_ip);
+  renderDNS(snap.dns);
+  renderInternet(snap.internet);
+  renderDevices(snap);
+  renderTraceroute(snap.traceroute);
   fetchHistory();
+  if (topoVisible) drawTopology(snap);
+}
+
+function setVal(id, text, cls) {
+  const el = document.getElementById(id);
+  el.textContent = text;
+  el.className = 'value' + (cls ? ' ' + cls : '');
 }
 
 function renderIssues(issues) {
@@ -409,10 +598,11 @@ function renderIssues(issues) {
   }
   el.innerHTML = issues.map(i => {
     const icon = i.severity === 'error' ? '🔴' : i.severity === 'warning' ? '🟡' : 'ℹ️';
+    const occ = i.occurrence_count > 1 ? `<span style="color:var(--muted);font-size:0.72rem;margin-left:6px">(×${i.occurrence_count})</span>` : '';
     return `<div class="issue ${i.severity}">
       <div class="issue-icon">${icon}</div>
       <div class="issue-body">
-        <div class="issue-title">${esc(i.title)}</div>
+        <div class="issue-title">${esc(i.title)}${occ}</div>
         <div class="issue-desc">${esc(i.description)}</div>
         ${i.suggestion ? `<div class="issue-suggestion">💡 ${esc(i.suggestion)}</div>` : ''}
       </div>
@@ -420,11 +610,353 @@ function renderIssues(issues) {
   }).join('');
 }
 
+function renderGateway(snap) {
+  const el = document.getElementById('gateway-panel');
+  const rows = [];
+
+  rows.push(clientRow('IP Address', snap.gateway || '—', 'muted'));
+  rows.push(clientRow('Hostname', snap.gateway_hostname || '—', 'muted'));
+  rows.push(clientRow('Reachable', snap.gateway_reachable ? '✓ Yes' : '✗ No', snap.gateway_reachable ? 'ok' : 'err'));
+  rows.push(clientRow('Latency', snap.gateway_rtt_ms > 0 ? snap.gateway_rtt_ms + 'ms' : '—',
+    snap.gateway_rtt_ms > 0 ? (snap.gateway_rtt_ms < 5 ? 'ok' : snap.gateway_rtt_ms < 20 ? '' : 'warn') : 'muted'));
+  rows.push(clientRow('Packet loss to gateway',
+    snap.packet_loss_gw_pct != null ? snap.packet_loss_gw_pct.toFixed(0) + '%' : '—',
+    snap.packet_loss_gw_pct > 0 ? 'err' : 'ok'));
+  rows.push(clientRow('IPv6', snap.ipv6 ? '✓ Available' : '✗ Not available', snap.ipv6 ? 'ok' : 'muted'));
+  if (snap.ntp_synced != null) {
+    rows.push(clientRow('NTP sync', snap.ntp_synced ? '✓ Synced' : '✗ Not synced', snap.ntp_synced ? 'ok' : 'warn'));
+  }
+  if (snap.wan_download_mbps > 0) {
+    rows.push(clientRow('WAN download', snap.wan_download_mbps.toFixed(1) + ' Mbps',
+      snap.wan_download_mbps >= 100 ? 'ok' : snap.wan_download_mbps >= 10 ? '' : 'warn'));
+  }
+
+  let portHtml = '';
+  if (snap.gateway_ports && snap.gateway_ports.length > 0) {
+    portHtml = `<div style="padding: 0.5rem 1rem 0.25rem; font-size:0.72rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em;">Open ports</div>
+    <div class="port-list">${snap.gateway_ports.map(p =>
+      `<span class="port-chip ${p.open ? 'open' : 'closed'}">${p.port} ${p.service}</span>`
+    ).join('')}</div>`;
+  }
+
+  el.innerHTML = rows.join('') + portHtml;
+}
+
+function renderPublicIP(info) {
+  const panel = document.getElementById('public-ip-panel');
+  const el = document.getElementById('public-ip-rows');
+  if (!info || !info.query) { panel.style.display = 'none'; return; }
+  panel.style.display = '';
+  const rows = [];
+  rows.push(clientRow('Public IP', info.query, 'muted'));
+  if (info.isp) rows.push(clientRow('ISP', info.isp, 'muted'));
+  if (info.org) rows.push(clientRow('Organisation', info.org, 'muted'));
+  if (info.as) rows.push(clientRow('ASN', info.as, 'muted'));
+  if (info.city || info.regionName) rows.push(clientRow('Location', [info.city, info.regionName, info.country].filter(Boolean).join(', '), 'muted'));
+  el.innerHTML = rows.join('');
+}
+
+function renderDNS(dns) {
+  document.querySelector('#dns-table tbody').innerHTML = (dns || []).map(r => {
+    const dot = r.success ? (r.latency_ms > 200 ? 'slow' : 'ok') : 'fail';
+    const addrs = r.addresses && r.addresses.length ? `<span style="color:var(--muted);font-size:0.72rem;margin-left:6px">${r.addresses.slice(0,2).join(', ')}</span>` : '';
+    return `<tr>
+      <td><span class="dot ${dot}"></span><span class="name">${esc(r.resolver)}</span>${addrs}</td>
+      <td class="latency">${r.success ? r.latency_ms + 'ms' : esc(r.error || 'failed')}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderInternet(internet) {
+  document.querySelector('#internet-table tbody').innerHTML = (internet || []).map(p => {
+    const dot = p.success ? 'ok' : 'fail';
+    return `<tr>
+      <td><span class="dot ${dot}"></span><span class="name">${esc(p.target)}</span> <span class="vendor">${p.method}</span></td>
+      <td class="latency">${p.success ? p.latency_ms + 'ms' : 'failed'}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderDevices(snap) {
+  // Desktop table
+  document.getElementById('devices-tbody').innerHTML = snap.devices.map(d => {
+    const rttClass = d.rtt_ms < 0 ? '' : d.rtt_ms < 10 ? 'fast' : d.rtt_ms < 50 ? 'slow' : 'very-slow';
+    const rttText = d.rtt_ms < 0 ? '—' : d.rtt_ms + 'ms';
+    const name = d.nickname || d.hostname || d.ip;
+    const isGateway = d.ip === snap.gateway;
+    const isDup = d.duplicate_ip;
+    const bwText = formatBandwidth(d.rx_bps, d.tx_bps);
+    return `<tr${isDup ? ' class="dup"' : ''} onclick="openDevPopover('${esc(d.ip)}')">
+      <td><span class="status-pill ${d.status}">${statusLabel(d.status)}</span>${isDup ? ' <span style="color:var(--red);font-size:0.7rem" title="IP conflict">⚠</span>' : ''}</td>
+      <td><span class="hostname">${esc(name)}</span>${isGateway ? ' <span style="color:var(--accent);font-size:0.7rem">router</span>' : ''}${d.nickname && d.hostname ? ` <span class="vendor">${esc(d.hostname)}</span>` : ''}</td>
+      <td><span class="ip">${esc(d.ip)}</span></td>
+      <td><span class="mac">${esc(d.mac || '—')}</span></td>
+      <td><span class="vendor">${esc(d.vendor || '—')}</span></td>
+      <td>${(d.services||[]).map(s=>`<span class="port-chip open" style="font-family:inherit;font-size:0.7rem">${esc(s)}</span>`).join(' ') || '<span class="vendor">—</span>'}</td>
+      <td><span class="bw">${bwText}</span></td>
+      <td><span class="rtt ${rttClass}">${rttText}</span></td>
+      <td><span class="vendor">${timeAgo(d.last_seen)}</span></td>
+    </tr>`;
+  }).join('');
+
+  // Mobile cards
+  document.getElementById('device-cards').innerHTML = snap.devices.map(d => {
+    const name = d.nickname || d.hostname || d.ip;
+    const isGateway = d.ip === snap.gateway;
+    const bwText = formatBandwidth(d.rx_bps, d.tx_bps);
+    return `<div class="device-card" onclick="openDevPopover('${esc(d.ip)}')">
+      <div class="device-card-top">
+        <span class="device-card-name">${esc(name)}${isGateway ? ' <span style="color:var(--accent);font-size:0.72rem">router</span>' : ''}</span>
+        <span class="status-pill ${d.status}" style="font-size:0.68rem">${statusLabel(d.status)}</span>
+      </div>
+      <div class="device-card-meta">
+        <span class="ip">${esc(d.ip)}</span>
+        ${d.vendor ? `<span>${esc(d.vendor)}</span>` : ''}
+        ${bwText !== '—' ? `<span class="bw">${bwText}</span>` : ''}
+        ${d.rtt_ms >= 0 ? `<span>${d.rtt_ms}ms</span>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function formatBandwidth(rx, tx) {
+  if (!rx && !tx) return '—';
+  const fmt = v => v >= 1e6 ? (v/1e6).toFixed(1)+' Mbps' : v >= 1e3 ? (v/1e3).toFixed(0)+' Kbps' : v.toFixed(0)+' Bps';
+  return `↓${fmt(rx||0)} ↑${fmt(tx||0)}`;
+}
+
+function renderTraceroute(hops) {
+  const tbody = document.querySelector('#traceroute-table tbody');
+  if (!hops || hops.length === 0) {
+    tbody.innerHTML = '<tr><td style="color:var(--muted);padding:0.75rem 1rem">No traceroute data yet — runs on startup</td></tr>';
+    return;
+  }
+  tbody.innerHTML = hops.map(h => {
+    if (h.timeout) {
+      return `<tr><td style="color:var(--muted)">Hop ${h.hop}</td><td style="color:var(--muted)">* * *</td><td></td></tr>`;
+    }
+    const rttCls = h.rtt_ms < 20 ? 'ok' : h.rtt_ms < 100 ? '' : 'warn';
+    const rttColor = rttCls === 'ok' ? 'var(--green)' : rttCls === 'warn' ? 'var(--yellow)' : '';
+    return `<tr>
+      <td style="color:var(--muted);width:50px">Hop ${h.hop}</td>
+      <td><span class="name">${esc(h.hostname || h.ip)}</span>${h.hostname && h.ip && h.hostname !== h.ip ? ` <span class="ip">${esc(h.ip)}</span>` : ''}</td>
+      <td class="latency" style="${rttColor ? 'color:'+rttColor : ''}">${h.rtt_ms}ms</td>
+    </tr>`;
+  }).join('');
+}
+
+function clientRow(label, value, cls) {
+  const dotCls = cls === 'ok' ? 'ok' : cls === 'err' ? 'fail' : cls === 'warn' ? 'slow' : cls === 'muted' ? 'info' : 'unknown';
+  return `<div class="client-row">
+    <span class="dot ${dotCls}"></span>
+    <span class="row-label">${esc(label)}</span>
+    <span class="row-val ${cls || ''}">${esc(String(value))}</span>
+  </div>`;
+}
+
+// ── Topology map ───────────────────────────────────────────────────────────
+function toggleTopology() {
+  topoVisible = !topoVisible;
+  document.getElementById('topology-wrap').style.display = topoVisible ? '' : 'none';
+  document.querySelector('#topology-panel .collapse-btn').textContent = topoVisible ? '▲' : '▼';
+}
+
+function drawTopologyOnCanvas(snap, canvas, W, H, nodesOut) {
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = W * dpr; canvas.height = H * dpr;
+  canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  const isDark = (document.documentElement.getAttribute('data-theme') || 'dark') !== 'light';
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = isDark ? '#0a0a0f' : '#f0f2f7';
+  ctx.fillRect(0, 0, W, H);
+
+  const green = getComputedStyle(document.documentElement).getPropertyValue('--green').trim() || '#3dd68c';
+  const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#5b8def';
+  const yellow = getComputedStyle(document.documentElement).getPropertyValue('--yellow').trim() || '#f0c040';
+  const muted = getComputedStyle(document.documentElement).getPropertyValue('--muted').trim() || '#6b6b80';
+  const text = getComputedStyle(document.documentElement).getPropertyValue('--text').trim() || '#e8e8f0';
+
+  function statusColor(s) {
+    return s === 'online' ? green : s === 'lan_only' ? yellow : muted;
+  }
+
+  // Scale node sizes with canvas area
+  const scale = Math.min(W, H) / 500;
+  const nodeR = Math.max(14, Math.min(28, 18 * scale));
+  const gwR = Math.max(20, Math.min(36, 28 * scale));
+  const serverR = Math.max(16, Math.min(28, 22 * scale));
+  const fontSize = Math.max(9, Math.min(13, 10 * scale));
+
+  const gwX = W / 2, gwY = Math.max(60, 70 * scale);
+  const serverX = W / 2, serverY = H * 0.5;
+  const onlineDevices = (snap.devices || []).filter(d => d.ip !== snap.gateway);
+  const n = onlineDevices.length;
+  const radius = Math.min(W * 0.42, H * 0.38, Math.min(W, H) * 0.38);
+
+  // Clear output nodes
+  nodesOut.length = 0;
+
+  function drawNode(x, y, color, label, sublabel, r) {
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fillStyle = color + '22'; ctx.fill();
+    ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.stroke();
+    ctx.fillStyle = text;
+    ctx.font = `bold ${Math.min(fontSize, r * 0.55)}px sans-serif`;
+    ctx.textAlign = 'center';
+    const maxChars = Math.max(8, Math.floor(r * 1.2));
+    ctx.fillText(label.length > maxChars ? label.slice(0, maxChars-1) + '…' : label, x, y + r + fontSize + 2);
+    if (sublabel) {
+      ctx.fillStyle = muted;
+      ctx.font = `${Math.max(7, fontSize - 2)}px monospace`;
+      ctx.fillText(sublabel, x, y + r + fontSize * 2 + 2);
+    }
+  }
+
+  // Internet cloud
+  const cloudY = gwY - gwR - 15;
+  ctx.setLineDash([4, 4]);
+  ctx.strokeStyle = muted; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(gwX, gwY - gwR); ctx.lineTo(gwX, cloudY + 18); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = muted + '33';
+  ctx.beginPath(); ctx.ellipse(gwX, cloudY, 36 * Math.min(1.5, scale), 18 * Math.min(1.5, scale), 0, 0, Math.PI * 2); ctx.fill();
+  ctx.strokeStyle = muted; ctx.lineWidth = 1; ctx.stroke();
+  ctx.fillStyle = muted; ctx.font = `${fontSize - 1}px sans-serif`; ctx.textAlign = 'center';
+  ctx.fillText('internet', gwX, cloudY + 4);
+
+  // Server → gateway line
+  ctx.setLineDash([6, 3]);
+  ctx.strokeStyle = accent + '88'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(serverX, serverY - serverR); ctx.lineTo(gwX, gwY + gwR); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Device nodes
+  onlineDevices.forEach((d, i) => {
+    const angle = (i / n) * Math.PI * 2 - Math.PI / 2;
+    const dx = serverX + Math.cos(angle) * radius;
+    const dy = serverY + Math.sin(angle) * radius;
+    nodesOut.push({ ip: d.ip, cx: dx, cy: dy });
+
+    const color = statusColor(d.status);
+    ctx.strokeStyle = color + '55'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(serverX, serverY); ctx.lineTo(dx, dy); ctx.stroke();
+
+    ctx.beginPath(); ctx.arc(dx, dy, nodeR, 0, Math.PI * 2);
+    ctx.fillStyle = color + '22'; ctx.fill();
+    ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.stroke();
+
+    const label = d.nickname || d.hostname || d.ip;
+    const maxChars = Math.max(8, Math.floor(nodeR * 1.2));
+    ctx.fillStyle = text; ctx.font = `${fontSize}px sans-serif`; ctx.textAlign = 'center';
+    ctx.fillText(label.length > maxChars ? label.slice(0, maxChars-1) + '…' : label, dx, dy + nodeR + fontSize + 2);
+    ctx.fillStyle = muted; ctx.font = `${Math.max(7, fontSize-2)}px monospace`;
+    ctx.fillText(d.ip, dx, dy + nodeR + fontSize * 2 + 2);
+  });
+
+  // Gateway
+  nodesOut.push({ ip: snap.gateway || '', cx: gwX, cy: gwY });
+  drawNode(gwX, gwY, accent, snap.gateway_hostname || snap.gateway || 'router', snap.gateway, gwR);
+
+  // Server
+  nodesOut.push({ ip: snap.server_ip || '', cx: serverX, cy: serverY });
+  drawNode(serverX, serverY, accent, snap.server_ip || 'server', '', serverR);
+  ctx.fillStyle = accent; ctx.font = `${fontSize - 1}px sans-serif`; ctx.textAlign = 'center';
+  ctx.fillText('this server', serverX, serverY + 5);
+}
+
+function drawTopology(snap, canvasEl) {
+  const canvas = canvasEl || document.getElementById('topology-canvas');
+  const wrap = canvasEl ? canvasEl.parentElement : document.getElementById('topology-wrap');
+  if (!canvasEl && wrap.style.display === 'none') return;
+  const W = wrap.getBoundingClientRect().width - 16;
+  const H = 340;
+  drawTopologyOnCanvas(snap, canvas, W, H, topoNodes);
+}
+
+// Topology fullscreen
+let topoFullscreenNodes = [];
+
+function openTopoFullscreen() {
+  if (!lastSnapshot) return;
+  document.getElementById('topo-backdrop').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  requestAnimationFrame(() => {
+    const canvas = document.getElementById('topology-canvas-full');
+    const wrap = document.getElementById('topo-fullscreen-wrap');
+    const W = wrap.clientWidth - 16;
+    const H = wrap.clientHeight - 16;
+    topoFullscreenNodes = [];
+    drawTopologyOnCanvas(lastSnapshot, canvas, W, H, topoFullscreenNodes);
+  });
+}
+
+function closeTopoFullscreen(e) {
+  if (e && e.target !== document.getElementById('topo-backdrop')) return;
+  document.getElementById('topo-backdrop').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('topology-canvas-full').addEventListener('click', e => {
+  const canvas = document.getElementById('topology-canvas-full');
+  const rect = canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  for (const node of topoFullscreenNodes) {
+    if (!node.ip) continue;
+    if (Math.hypot(x - node.cx, y - node.cy) < 36) {
+      openDevPopover(node.ip);
+      return;
+    }
+  }
+});
+
+document.getElementById('topology-canvas-full').addEventListener('mousemove', e => {
+  const canvas = document.getElementById('topology-canvas-full');
+  const rect = canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  let over = false;
+  for (const node of topoFullscreenNodes) {
+    if (node.ip && Math.hypot(x - node.cx, y - node.cy) < 36) { over = true; break; }
+  }
+  canvas.style.cursor = over ? 'pointer' : 'default';
+});
+
+// Topology click handler
+document.getElementById('topology-canvas').addEventListener('click', e => {
+  const canvas = document.getElementById('topology-canvas');
+  const rect = canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  for (const node of topoNodes) {
+    if (!node.ip) continue;
+    const dist = Math.hypot(x - node.cx, y - node.cy);
+    if (dist < 32) { openDevPopover(node.ip); return; }
+  }
+});
+
+document.getElementById('topology-canvas').addEventListener('mousemove', e => {
+  const canvas = document.getElementById('topology-canvas');
+  const rect = canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  let over = false;
+  for (const node of topoNodes) {
+    if (node.ip && Math.hypot(x - node.cx, y - node.cy) < 32) { over = true; break; }
+  }
+  canvas.style.cursor = over ? 'pointer' : 'default';
+});
+
 // ── History graph ──────────────────────────────────────────────────────────
 function fetchHistory() {
   fetch('/api/history').then(r => r.json()).then(data => {
     historyData = data || [];
     drawGraph();
+    drawUptimeTimeline();
   }).catch(() => {});
 }
 
@@ -434,122 +966,442 @@ function drawGraph() {
   const rect = canvas.parentElement.getBoundingClientRect();
   const W = rect.width - 32;
   const H = 120;
-  canvas.width = W * dpr;
-  canvas.height = H * dpr;
-  canvas.style.width = W + 'px';
-  canvas.style.height = H + 'px';
+  canvas.width = W * dpr; canvas.height = H * dpr;
+  canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
   const ctx = canvas.getContext('2d');
   ctx.scale(dpr, dpr);
-
   ctx.clearRect(0, 0, W, H);
 
   if (!historyData || historyData.length < 2) {
     ctx.fillStyle = 'rgba(255,255,255,0.15)';
-    ctx.font = '13px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('Collecting data… check back in 5 minutes', W / 2, H / 2);
+    ctx.font = '13px sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText('Collecting data… check back in 5 minutes', W/2, H/2);
     return;
   }
 
-  const pad = { top: 12, right: 12, bottom: 24, left: 42 };
+  const pad = {top:12, right:12, bottom:24, left:42};
   const gW = W - pad.left - pad.right;
   const gH = H - pad.top - pad.bottom;
-
   const maxLat = Math.max(...historyData.map(p => p.avg_latency_ms), 10);
 
-  // Grid lines
-  ctx.strokeStyle = 'rgba(255,255,255,0.05)';
-  ctx.lineWidth = 1;
-  for (let i = 0; i <= 4; i++) {
-    const y = pad.top + (gH / 4) * i;
-    ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(pad.left + gW, y); ctx.stroke();
-    ctx.fillStyle = 'rgba(255,255,255,0.2)';
-    ctx.font = '10px monospace';
-    ctx.textAlign = 'right';
-    ctx.fillText(Math.round(maxLat * (1 - i / 4)) + 'ms', pad.left - 6, y + 4);
+  ctx.strokeStyle = 'rgba(255,255,255,0.05)'; ctx.lineWidth = 1;
+  for (let i=0; i<=4; i++) {
+    const y = pad.top + (gH/4)*i;
+    ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(pad.left+gW, y); ctx.stroke();
+    ctx.fillStyle='rgba(255,255,255,0.2)'; ctx.font='10px monospace'; ctx.textAlign='right';
+    ctx.fillText(Math.round(maxLat*(1-i/4))+'ms', pad.left-6, y+4);
   }
 
-  const xScale = i => pad.left + (i / (historyData.length - 1)) * gW;
-  const yScale = v => pad.top + gH - (v / maxLat) * gH;
+  const xS = i => pad.left + (i/(historyData.length-1))*gW;
+  const yS = v => pad.top + gH - (v/maxLat)*gH;
 
-  // Internet outage shading
-  historyData.forEach((p, i) => {
-    if (!p.internet_ok && i < historyData.length - 1) {
-      const x1 = xScale(i);
-      const x2 = xScale(i + 1);
-      ctx.fillStyle = 'rgba(240,90,90,0.08)';
-      ctx.fillRect(x1, pad.top, x2 - x1, gH);
+  historyData.forEach((p,i) => {
+    if (!p.internet_ok && i < historyData.length-1) {
+      ctx.fillStyle='rgba(240,90,90,0.08)';
+      ctx.fillRect(xS(i), pad.top, xS(i+1)-xS(i), gH);
     }
   });
 
-  // Latency fill
-  const grad = ctx.createLinearGradient(0, pad.top, 0, pad.top + gH);
-  grad.addColorStop(0, 'rgba(91,141,239,0.3)');
-  grad.addColorStop(1, 'rgba(91,141,239,0.02)');
+  const grad = ctx.createLinearGradient(0, pad.top, 0, pad.top+gH);
+  grad.addColorStop(0,'rgba(91,141,239,0.3)'); grad.addColorStop(1,'rgba(91,141,239,0.02)');
   ctx.beginPath();
-  ctx.moveTo(xScale(0), yScale(historyData[0].avg_latency_ms));
-  historyData.forEach((p, i) => ctx.lineTo(xScale(i), yScale(p.avg_latency_ms)));
-  ctx.lineTo(xScale(historyData.length - 1), pad.top + gH);
-  ctx.lineTo(xScale(0), pad.top + gH);
-  ctx.closePath();
-  ctx.fillStyle = grad;
-  ctx.fill();
+  historyData.forEach((p,i) => i===0 ? ctx.moveTo(xS(i),yS(p.avg_latency_ms)) : ctx.lineTo(xS(i),yS(p.avg_latency_ms)));
+  ctx.lineTo(xS(historyData.length-1), pad.top+gH); ctx.lineTo(xS(0), pad.top+gH);
+  ctx.closePath(); ctx.fillStyle=grad; ctx.fill();
 
-  // Latency line
-  ctx.beginPath();
-  ctx.strokeStyle = 'rgba(91,141,239,0.9)';
-  ctx.lineWidth = 2;
-  historyData.forEach((p, i) => {
-    i === 0 ? ctx.moveTo(xScale(i), yScale(p.avg_latency_ms))
-             : ctx.lineTo(xScale(i), yScale(p.avg_latency_ms));
-  });
+  ctx.beginPath(); ctx.strokeStyle='rgba(91,141,239,0.9)'; ctx.lineWidth=2;
+  historyData.forEach((p,i) => i===0 ? ctx.moveTo(xS(i),yS(p.avg_latency_ms)) : ctx.lineTo(xS(i),yS(p.avg_latency_ms)));
   ctx.stroke();
 
-  // Time labels
-  ctx.fillStyle = 'rgba(255,255,255,0.2)';
-  ctx.font = '10px monospace';
-  ctx.textAlign = 'center';
-  const labelCount = Math.min(6, historyData.length);
-  for (let i = 0; i < labelCount; i++) {
-    const idx = Math.round(i * (historyData.length - 1) / (labelCount - 1));
+  ctx.fillStyle='rgba(255,255,255,0.2)'; ctx.font='10px monospace'; ctx.textAlign='center';
+  const lc = Math.min(6, historyData.length);
+  for (let i=0; i<lc; i++) {
+    const idx = Math.round(i*(historyData.length-1)/(lc-1));
     const t = new Date(historyData[idx].t);
-    const label = t.getHours().toString().padStart(2,'0') + ':' + t.getMinutes().toString().padStart(2,'0');
-    ctx.fillText(label, xScale(idx), H - 6);
+    ctx.fillText(t.getHours().toString().padStart(2,'0')+':'+t.getMinutes().toString().padStart(2,'0'), xS(idx), H-6);
   }
 
-  // Range badge
   if (historyData.length >= 2) {
-    const first = new Date(historyData[0].t);
-    const last = new Date(historyData[historyData.length - 1].t);
-    const mins = Math.round((last - first) / 60000);
-    document.getElementById('graph-range').textContent = mins < 60 ? mins + 'min' : Math.round(mins / 60) + 'h';
+    const mins = Math.round((new Date(historyData[historyData.length-1].t) - new Date(historyData[0].t)) / 60000);
+    document.getElementById('graph-range').textContent = mins < 60 ? mins+'min' : Math.round(mins/60)+'h';
   }
 }
 
-// ── Client-side internet probe ─────────────────────────────────────────────
-function probeClient() {
-  const el = document.getElementById('client-result');
+function drawUptimeTimeline() {
+  const canvas = document.getElementById('uptime-chart');
+  const wrap = document.getElementById('uptime-wrap');
+  const dpr = window.devicePixelRatio || 1;
+  const W = wrap.getBoundingClientRect().width - 32;
+  const H = 40;
+  canvas.width = W * dpr; canvas.height = H * dpr;
+  canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, W, H);
+
+  if (!historyData || historyData.length === 0) return;
+
+  const slotW = W / historyData.length;
+  let okCount = 0;
+  historyData.forEach((p, i) => {
+    const hasData = p.avg_latency_ms > 0 || p.device_count > 0;
+    const ok = p.internet_ok && p.dns_ok;
+    const color = !hasData ? 'rgba(255,255,255,0.08)' : ok ? '#3dd68c' : '#f05a5a';
+    ctx.fillStyle = color;
+    ctx.fillRect(i * slotW + 0.5, 4, slotW - 1, H - 8);
+    if (ok) okCount++;
+  });
+
+  const pct = historyData.length > 0 ? Math.round((okCount / historyData.length) * 100) : null;
+  const pctEl = document.getElementById('uptime-pct');
+  if (pct !== null) {
+    pctEl.textContent = `${pct}% uptime over ${historyData.length} samples`;
+  }
+}
+
+// ── Client-side diagnostics ────────────────────────────────────────────────
+const clientState = {};
+
+function updateClientRow(key, label, value, cls) {
+  clientState[key] = {label, value, cls};
+  renderClientRows();
+}
+
+function renderClientRows() {
+  const order = ['local-ip','internet-cf','internet-google','internet-apple','captive','http-check','https-check','dns-time','bandwidth','upload','inet-down','inet-up','doh-cf','doh-google','dns-match'];
+  const el = document.getElementById('client-rows');
+  el.innerHTML = order
+    .filter(k => clientState[k])
+    .map(k => {
+      const r = clientState[k];
+      return clientRow(r.label, r.value, r.cls);
+    }).join('');
+}
+
+function detectLocalIP() {
+  try {
+    const pc = new RTCPeerConnection({iceServers: []});
+    pc.createDataChannel('');
+    pc.createOffer().then(o => pc.setLocalDescription(o));
+    pc.onicecandidate = e => {
+      if (!e || !e.candidate) return;
+      const m = e.candidate.candidate.match(/(\d+\.\d+\.\d+\.\d+)/);
+      if (m && !m[1].startsWith('0.')) {
+        document.getElementById('client-device-ip').textContent = m[1];
+        updateClientRow('local-ip', 'This device IP (WebRTC)', m[1], 'muted');
+        pc.close();
+      }
+    };
+  } catch(e) {
+    updateClientRow('local-ip', 'This device IP', 'Not available', 'muted');
+  }
+}
+
+function probeClientInternet() {
+  const targets = [
+    {key:'internet-cf',   label:'Internet → Cloudflare',  url:'https://1.1.1.1'},
+    {key:'internet-google',label:'Internet → Google',     url:'https://www.google.com'},
+    {key:'internet-apple', label:'Internet → Apple',      url:'https://www.apple.com'},
+  ];
+  targets.forEach(t => {
+    updateClientRow(t.key, t.label, '⏳ testing…', 'muted');
+    const start = Date.now();
+    fetch(t.url, {mode:'no-cors', cache:'no-store'})
+      .then(() => updateClientRow(t.key, t.label, '✓ ' + (Date.now()-start) + 'ms', 'ok'))
+      .catch(() => updateClientRow(t.key, t.label, '✗ unreachable', 'err'));
+  });
+}
+
+function probeCaptivePortal() {
+  updateClientRow('captive', 'Captive portal', '⏳ checking…', 'muted');
+  fetch('http://captive.apple.com/hotspot-detect.html', {cache:'no-store'})
+    .then(r => r.text())
+    .then(text => {
+      const hasPortal = !text.includes('Success');
+      updateClientRow('captive', 'Captive portal', hasPortal ? '⚠ Detected — sign in required' : '✓ None detected', hasPortal ? 'warn' : 'ok');
+    })
+    .catch(() => updateClientRow('captive', 'Captive portal', '— could not check', 'muted'));
+}
+
+function probeHTTPvsHTTPS() {
+  updateClientRow('http-check', 'HTTP connectivity', '⏳ testing…', 'muted');
+  const startHttp = Date.now();
+  fetch('http://1.1.1.1', {mode:'no-cors', cache:'no-store'})
+    .then(() => updateClientRow('http-check', 'HTTP connectivity', '✓ ' + (Date.now()-startHttp) + 'ms', 'ok'))
+    .catch(() => updateClientRow('http-check', 'HTTP connectivity', '✗ blocked', 'err'));
+
+  updateClientRow('https-check', 'HTTPS / TLS', '⏳ testing…', 'muted');
+  const startHttps = Date.now();
+  fetch('https://1.1.1.1', {mode:'no-cors', cache:'no-store'})
+    .then(() => updateClientRow('https-check', 'HTTPS / TLS', '✓ ' + (Date.now()-startHttps) + 'ms', 'ok'))
+    .catch(() => updateClientRow('https-check', 'HTTPS / TLS', '✗ TLS error or blocked', 'err'));
+}
+
+function probeDNSTiming() {
+  updateClientRow('dns-time', 'Browser DNS time', '⏳ measuring…', 'muted');
+  const url = 'https://www.google.com/favicon.ico?_=' + Date.now();
+  fetch(url, {mode:'no-cors', cache:'no-store'})
+    .then(() => {
+      const entries = performance.getEntriesByType('resource');
+      const entry = entries.find(e => e.name.includes('google.com/favicon'));
+      if (entry && entry.domainLookupEnd > entry.domainLookupStart) {
+        const dns = Math.round(entry.domainLookupEnd - entry.domainLookupStart);
+        updateClientRow('dns-time', 'Browser DNS time', dns + 'ms', dns < 20 ? 'ok' : dns < 100 ? '' : 'warn');
+      } else {
+        updateClientRow('dns-time', 'Browser DNS time', 'cached (< 1ms)', 'ok');
+      }
+    })
+    .catch(() => updateClientRow('dns-time', 'Browser DNS time', '— could not measure', 'muted'));
+}
+
+function probeBandwidth() {
+  updateClientRow('bandwidth', 'Download from server', '⏳ measuring…', 'muted');
   const start = Date.now();
-  fetch('https://1.1.1.1', {mode: 'no-cors', cache: 'no-store'})
+  fetch('/api/probe-asset', {cache:'no-store'})
+    .then(r => r.arrayBuffer())
+    .then(buf => {
+      const ms = Date.now() - start;
+      const mbps = ((buf.byteLength * 8) / (ms / 1000) / 1e6).toFixed(1);
+      updateClientRow('bandwidth', 'Download from server', '~' + mbps + ' Mbps', mbps > 100 ? 'ok' : mbps > 10 ? '' : 'warn');
+    })
+    .catch(() => updateClientRow('bandwidth', 'LAN download speed', '— could not measure', 'muted'));
+}
+
+function probeUpload() {
+  updateClientRow('upload', 'Upload to server', '⏳ measuring…', 'muted');
+  const size = 512 * 1024;
+  const buf = new Uint8Array(size);
+  const start = Date.now();
+  fetch('/api/probe-asset', {method:'POST', body: buf, cache:'no-store'})
     .then(() => {
       const ms = Date.now() - start;
-      el.innerHTML = `<span style="color:var(--green)">✓ Internet reachable</span> <span style="color:var(--muted);font-size:0.78rem">${ms}ms</span>`;
+      const mbps = ((size * 8) / (ms / 1000) / 1e6).toFixed(1);
+      updateClientRow('upload', 'Upload to server', '~' + mbps + ' Mbps', mbps > 100 ? 'ok' : mbps > 10 ? '' : 'warn');
     })
-    .catch(() => {
-      el.innerHTML = `<span style="color:var(--red)">✗ No internet from this device</span>`;
+    .catch(() => updateClientRow('upload', 'Upload to server', '— could not measure', 'muted'));
+}
+
+function probeDOH() {
+  updateClientRow('doh-cf', 'DoH Cloudflare (browser)', '⏳ querying…', 'muted');
+  updateClientRow('doh-google', 'DoH Google (browser)', '⏳ querying…', 'muted');
+  const domain = 'google.com';
+  let cfIPs = [], googleIPs = [];
+  const cfPromise = fetch(`https://cloudflare-dns.com/dns-query?name=${domain}&type=A`, {headers:{'Accept':'application/dns-json'}, cache:'no-store'})
+    .then(r => r.json())
+    .then(data => {
+      cfIPs = (data.Answer||[]).filter(a=>a.type===1).map(a=>a.data).slice(0,2);
+      updateClientRow('doh-cf', 'DoH Cloudflare (browser)', cfIPs.length ? '✓ ' + cfIPs.join(', ') : '✗ no answer', cfIPs.length ? 'ok' : 'err');
+    })
+    .catch(() => updateClientRow('doh-cf', 'DoH Cloudflare (browser)', '✗ failed', 'err'));
+  const googlePromise = fetch(`https://dns.google/resolve?name=${domain}&type=A`, {cache:'no-store'})
+    .then(r => r.json())
+    .then(data => {
+      googleIPs = (data.Answer||[]).filter(a=>a.type===1).map(a=>a.data).slice(0,2);
+      updateClientRow('doh-google', 'DoH Google (browser)', googleIPs.length ? '✓ ' + googleIPs.join(', ') : '✗ no answer', googleIPs.length ? 'ok' : 'err');
+    })
+    .catch(() => updateClientRow('doh-google', 'DoH Google (browser)', '✗ failed', 'err'));
+
+  // After both DoH results arrive, compare against browser's native DNS
+  Promise.allSettled([cfPromise, googlePromise]).then(() => {
+    if (!cfIPs.length && !googleIPs.length) return;
+    // Use performance API to get the resolved IP from a plain browser fetch
+    const uniqueUrl = 'https://google.com/favicon.ico?_=' + Date.now();
+    fetch(uniqueUrl, {mode:'no-cors', cache:'no-store'}).then(() => {
+      const entries = performance.getEntriesByName(uniqueUrl);
+      const entry = entries[entries.length - 1];
+      // serverIPAddress is available in some browsers
+      const browserIP = entry && entry.serverIPAddress;
+      const knownIPs = [...new Set([...cfIPs, ...googleIPs])];
+      if (browserIP) {
+        const match = knownIPs.some(ip => browserIP.startsWith(ip) || ip.startsWith(browserIP));
+        updateClientRow('dns-match', 'Browser DNS match', match
+          ? '✓ ' + browserIP + ' (matches DoH)'
+          : '⚠ ' + browserIP + ' (differs from DoH — may be intercepted)',
+          match ? 'ok' : 'warn');
+      } else if (cfIPs.length && googleIPs.length) {
+        // Can't get browser IP, but check if both DoH resolvers agree
+        const agree = cfIPs.some(ip => googleIPs.includes(ip));
+        updateClientRow('dns-match', 'DNS resolver consistency', agree
+          ? '✓ Cloudflare & Google agree'
+          : '⚠ Resolvers disagree — possible hijacking',
+          agree ? 'ok' : 'warn');
+      }
+    }).catch(() => {
+      if (cfIPs.length && googleIPs.length) {
+        const agree = cfIPs.some(ip => googleIPs.includes(ip));
+        updateClientRow('dns-match', 'DNS resolver consistency', agree
+          ? '✓ Cloudflare & Google agree'
+          : '⚠ Resolvers disagree — possible hijacking',
+          agree ? 'ok' : 'warn');
+      }
     });
+  });
+}
+
+function probeInternetDownload() {
+  updateClientRow('inet-down', 'Internet download (via Cloudflare)', '⏳ measuring…', 'muted');
+  const url = 'https://speed.cloudflare.com/__down?bytes=5000000';
+  const start = Date.now();
+  fetch(url, {cache: 'no-store'})
+    .then(r => r.arrayBuffer())
+    .then(buf => {
+      const ms = Date.now() - start;
+      const mbps = ((buf.byteLength * 8) / (ms / 1000) / 1e6).toFixed(1);
+      updateClientRow('inet-down', 'Internet download (via Cloudflare)', '~' + mbps + ' Mbps', mbps > 100 ? 'ok' : mbps > 10 ? '' : 'warn');
+    })
+    .catch(() => updateClientRow('inet-down', 'Internet download (via Cloudflare)', '— could not measure', 'muted'));
+}
+
+function probeInternetUpload() {
+  updateClientRow('inet-up', 'Internet upload (via Cloudflare)', '⏳ measuring…', 'muted');
+  const size = 2 * 1024 * 1024;
+  const buf = new Uint8Array(size);
+  const start = Date.now();
+  fetch('https://speed.cloudflare.com/__up', {method: 'POST', body: buf, cache: 'no-store'})
+    .then(() => {
+      const ms = Date.now() - start;
+      const mbps = ((size * 8) / (ms / 1000) / 1e6).toFixed(1);
+      updateClientRow('inet-up', 'Internet upload (via Cloudflare)', '~' + mbps + ' Mbps', mbps > 100 ? 'ok' : mbps > 10 ? '' : 'warn');
+    })
+    .catch(() => updateClientRow('inet-up', 'Internet upload (via Cloudflare)', '— could not measure', 'muted'));
+}
+
+function runClientProbes() {
+  detectLocalIP();
+  probeClientInternet();
+  probeCaptivePortal();
+  probeHTTPvsHTTPS();
+  probeDNSTiming();
+  probeBandwidth();
+  probeUpload();
+  probeDOH();
+  probeInternetDownload();
+  probeInternetUpload();
+}
+
+// ── Alerts ─────────────────────────────────────────────────────────────────
+const alertTypeIcon = {
+  internet_down: '🔴', internet_up: '🟢', new_device: '📡',
+  issue_appeared: '🔴', issue_cleared: '✅', device_offline: '📵', device_online: '📶'
+};
+
+function toggleAlerts() {
+  alertsVisible = !alertsVisible;
+  document.getElementById('alerts-wrap').classList.toggle('open', alertsVisible);
+  if (alertsVisible) {
+    fetchAlerts();
+    document.getElementById('alert-badge').classList.remove('visible');
+  }
+}
+
+function fetchAlerts() {
+  fetch('/api/alerts').then(r => r.json()).then(renderAlerts).catch(() => {});
+}
+
+function renderAlerts(alerts) {
+  const el = document.getElementById('alerts-list');
+  if (!alerts || alerts.length === 0) {
+    el.innerHTML = '<div class="no-issues" style="color:var(--muted)">No alerts yet</div>';
+    return;
+  }
+  const sorted = [...alerts].reverse().slice(0, 50);
+  el.innerHTML = sorted.map(a => {
+    const icon = alertTypeIcon[a.type] || '🔔';
+    return `<div class="alert-item ${esc(a.type)}">
+      <span style="font-size:1.1rem;flex-shrink:0">${icon}</span>
+      <div class="alert-body">
+        <div class="alert-title">${esc(a.title)}</div>
+        ${a.description ? `<div class="alert-desc">${esc(a.description)}</div>` : ''}
+      </div>
+      <span class="alert-time">${timeAgo(a.timestamp)}</span>
+    </div>`;
+  }).join('');
+}
+
+// ── Share ──────────────────────────────────────────────────────────────────
+function shareSnapshot() {
+  const btn = document.getElementById('share-btn');
+  btn.textContent = '…';
+  fetch('/api/share')
+    .then(r => r.json())
+    .then(data => {
+      const url = location.origin + location.pathname + '?share=' + data.token;
+      navigator.clipboard.writeText(url).catch(() => {});
+      btn.textContent = '✓ Copied!';
+      setTimeout(() => { btn.textContent = '↗ Share'; }, 2500);
+    })
+    .catch(() => { btn.textContent = '↗ Share'; });
+}
+
+// ── Issue log ───────────────────────────────────────────────────────────────
+let issueLogVisible = false;
+
+function toggleIssueLog() {
+  issueLogVisible = !issueLogVisible;
+  document.getElementById('issue-log-wrap').style.display = issueLogVisible ? '' : 'none';
+  document.querySelector('.issue-log-toggle').textContent = issueLogVisible ? '📋 Hide history' : '📋 Show history';
+  if (issueLogVisible) fetchIssueLog();
+}
+
+function fetchIssueLog() {
+  fetch('/api/issue-log').then(r => r.json()).then(renderIssueLog).catch(() => {});
+}
+
+function renderIssueLog(entries) {
+  const el = document.getElementById('issue-log-list');
+  if (!entries || entries.length === 0) {
+    el.innerHTML = '<div class="no-issues" style="color:var(--muted)">No issue history yet</div>';
+    return;
+  }
+  const sorted = [...entries].sort((a, b) => {
+    if (a.active !== b.active) return a.active ? -1 : 1;
+    return new Date(b.last_seen) - new Date(a.last_seen);
+  });
+  el.innerHTML = sorted.map(e => {
+    const icon = e.severity === 'error' ? '🔴' : e.severity === 'warning' ? '🟡' : 'ℹ️';
+    const clearedBadge = !e.active && e.cleared_at
+      ? `<span class="cleared-badge">✓ Cleared ${timeAgo(e.cleared_at)}</span>` : '';
+    const occ = e.occurrence_count > 1 ? ` <span style="color:var(--muted);font-size:0.72rem">(×${e.occurrence_count})</span>` : '';
+    const duration = e.cleared_at
+      ? formatDuration(new Date(e.cleared_at) - new Date(e.first_seen))
+      : (e.active ? 'ongoing since ' + timeAgo(e.first_seen) : '');
+    return `<div class="issue-log-entry ${e.severity}${e.active ? '' : ' cleared'}">
+      <div class="issue-icon">${icon}</div>
+      <div class="issue-body">
+        <div class="issue-title">${esc(e.title)}${occ}${clearedBadge}${e.active ? ' <span style="color:var(--red);font-size:0.7rem">● active</span>' : ''}</div>
+        <div class="issue-desc">${esc(e.description)}</div>
+        ${e.suggestion ? `<div class="issue-suggestion">💡 ${esc(e.suggestion)}</div>` : ''}
+        <div class="issue-log-meta">
+          First seen: ${new Date(e.first_seen).toLocaleString()}
+          · Last seen: ${new Date(e.last_seen).toLocaleString()}
+          ${duration ? '· ' + duration : ''}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function formatDuration(ms) {
+  if (ms < 0) return '';
+  const s = Math.floor(ms / 1000);
+  if (s < 60) return `lasted ${s}s`;
+  if (s < 3600) return `lasted ${Math.floor(s/60)}m`;
+  return `lasted ${Math.floor(s/3600)}h ${Math.floor((s%3600)/60)}m`;
+}
+
+// ── Traceroute collapse ─────────────────────────────────────────────────────
+function toggleTraceroute() {
+  traceVisible = !traceVisible;
+  document.getElementById('traceroute-wrap').style.display = traceVisible ? '' : 'none';
+  document.querySelector('#traceroute-panel .collapse-btn').textContent = traceVisible ? '▲' : '▼';
 }
 
 // ── Scan trigger ───────────────────────────────────────────────────────────
 function triggerScan() {
   const btn = document.getElementById('scan-btn');
-  btn.disabled = true;
-  btn.textContent = 'Scanning…';
-  fetch('/api/scan', {method: 'POST'}).finally(() => {
-    setTimeout(() => {
-      btn.disabled = false;
-      btn.textContent = '↺ Scan now';
-    }, 5000);
+  btn.disabled = true; btn.textContent = 'Scanning…';
+  fetch('/api/scan', {method:'POST'}).finally(() => {
+    setTimeout(() => { btn.disabled = false; btn.textContent = '↺ Scan now'; }, 8000);
   });
 }
 
@@ -558,25 +1410,265 @@ function esc(s) {
   if (!s) return '';
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
-
 function statusLabel(s) {
-  return {online: '● Online', lan_only: '⚠ LAN only', offline: '○ Offline'}[s] || s;
+  return {online:'● Online', lan_only:'⚠ LAN only', offline:'○ Offline'}[s] || s;
 }
-
 function timeAgo(ts) {
   if (!ts) return '—';
   const d = Math.floor((Date.now() - new Date(ts)) / 1000);
   if (d < 5) return 'just now';
   if (d < 60) return d + 's ago';
-  if (d < 3600) return Math.floor(d / 60) + 'm ago';
-  return Math.floor(d / 3600) + 'h ago';
+  if (d < 3600) return Math.floor(d/60) + 'm ago';
+  return Math.floor(d/3600) + 'h ago';
+}
+
+// ── Device detail popover ───────────────────────────────────────────────────
+function openDevPopover(ip) {
+  if (!lastSnapshot) return;
+  const d = lastSnapshot.devices.find(x => x.ip === ip);
+  if (!d) return;
+  const snap = lastSnapshot;
+  const isGateway = d.ip === snap.gateway;
+
+  document.getElementById('dev-pop-title').textContent = d.nickname || d.hostname || d.ip;
+
+  const rttText = d.rtt_ms < 0 ? '—' : d.rtt_ms + 'ms';
+  const rttCls = d.rtt_ms < 0 ? 'muted' : d.rtt_ms < 10 ? 'ok' : d.rtt_ms < 50 ? '' : 'warn';
+
+  const statusCls = d.status === 'online' ? 'ok' : d.status === 'lan_only' ? 'warn' : 'err';
+  const statusTxt = {online:'● Online', lan_only:'⚠ LAN only (no internet)', offline:'○ Offline'}[d.status] || d.status;
+
+  function row(k, v, cls) {
+    return `<div class="pop-row"><span class="pk">${esc(k)}</span><span class="pv${cls ? ' '+cls : ''}">${esc(String(v||'—'))}</span></div>`;
+  }
+  function section(title) {
+    return `<div class="pop-section">${title}</div>`;
+  }
+
+  let html = '';
+
+  // Nickname editor
+  html += `<div class="pop-row" style="gap:0.5rem">
+    <span class="pk">Nickname</span>
+    <input class="nick-input" id="nick-input" type="text" placeholder="Set a friendly name…" value="${esc(d.nickname||'')}" maxlength="40">
+    <button class="nick-save" onclick="saveNickname('${esc(d.mac||'')}')">Save</button>
+  </div>`;
+
+  // Identity
+  html += section('Identity');
+  html += row('IP Address', d.ip);
+  html += row('Hostname', d.hostname || 'Unknown');
+  html += row('MAC Address', d.mac || 'Unknown');
+  html += row('Vendor / OUI', d.vendor || 'Unknown');
+  if (isGateway) html += row('Role', 'Gateway / Router', 'ok');
+  if (d.duplicate_ip) html += row('IP Conflict', '⚠ Duplicate IP detected', 'err');
+
+  // Status
+  html += section('Status');
+  html += row('Connection', statusTxt, statusCls);
+  html += row('Ping RTT', rttText, rttCls);
+  html += row('First seen', d.first_seen ? new Date(d.first_seen).toLocaleString() : '—', 'muted');
+  html += row('Last seen', d.last_seen ? new Date(d.last_seen).toLocaleString() : '—', 'muted');
+
+  // Bandwidth
+  if (d.rx_bps > 0 || d.tx_bps > 0) {
+    html += section('Bandwidth');
+    html += row('Download (→ device)', formatBandwidth(d.rx_bps, 0).replace('↓','').replace('↑0 Bps','').trim(), 'muted');
+    html += row('Upload (← device)', formatBandwidth(0, d.tx_bps).replace('↓0 Bps ','').trim(), 'muted');
+  }
+
+  // TLS cert
+  if (d.cert_expiry) {
+    const ci = d.cert_expiry;
+    html += section('TLS Certificate');
+    if (ci.error) {
+      html += row('Status', '✗ ' + ci.error, 'err');
+    } else {
+      const certCls = ci.days_left < 0 ? 'err' : ci.days_left <= 30 ? 'warn' : 'ok';
+      const certTxt = ci.days_left < 0
+        ? `Expired ${-ci.days_left} days ago`
+        : `Valid — ${ci.days_left} days remaining`;
+      html += row('Status', certTxt, certCls);
+      html += row('Expires', new Date(ci.not_after).toLocaleDateString(), certCls);
+    }
+  }
+
+  // Gateway-specific extras
+  if (isGateway) {
+    html += section('Gateway Details');
+    html += row('Hostname (rDNS)', snap.gateway_hostname || 'Unknown', 'muted');
+    html += row('Reachable', snap.gateway_reachable ? '✓ Yes' : '✗ No', snap.gateway_reachable ? 'ok' : 'err');
+    html += row('Latency', snap.gateway_rtt_ms > 0 ? snap.gateway_rtt_ms + 'ms' : '—',
+      snap.gateway_rtt_ms > 0 ? (snap.gateway_rtt_ms < 5 ? 'ok' : snap.gateway_rtt_ms < 20 ? '' : 'warn') : 'muted');
+    html += row('Packet loss', snap.packet_loss_gw_pct != null ? snap.packet_loss_gw_pct.toFixed(0) + '%' : '—',
+      snap.packet_loss_gw_pct > 0 ? 'err' : 'ok');
+    if (snap.gateway_ports && snap.gateway_ports.length > 0) {
+      const open = snap.gateway_ports.filter(p => p.open);
+      const closed = snap.gateway_ports.filter(p => !p.open);
+      if (open.length) html += row('Open ports', open.map(p => p.port + '/' + p.service).join(', '), 'ok');
+      if (closed.length) html += row('Closed ports', closed.map(p => p.port + '/' + p.service).join(', '), 'muted');
+    }
+    if (snap.public_ip && snap.public_ip.query) {
+      html += section('WAN / Public IP');
+      html += row('Public IP', snap.public_ip.query, 'muted');
+      if (snap.public_ip.isp) html += row('ISP', snap.public_ip.isp, 'muted');
+      if (snap.public_ip.org) html += row('Organisation', snap.public_ip.org, 'muted');
+      if (snap.public_ip.as) html += row('ASN', snap.public_ip.as, 'muted');
+      if (snap.public_ip.city) html += row('Location', [snap.public_ip.city, snap.public_ip.regionName, snap.public_ip.country].filter(Boolean).join(', '), 'muted');
+    }
+  }
+
+  // Network context
+  html += section('Network');
+  html += row('Subnet', snap.subnet || '—', 'muted');
+  const ipParts = d.ip.split('.');
+  const gwParts = (snap.gateway || '').split('.');
+  const sameSegment = ipParts.slice(0,3).join('.') === gwParts.slice(0,3).join('.');
+  html += row('Same segment as gateway', sameSegment ? '✓ Yes' : '✗ No', sameSegment ? 'ok' : 'warn');
+
+  // mDNS services
+  if (d.services && d.services.length > 0) {
+    html += section('Bonjour / mDNS Services');
+    html += `<div class="pop-row"><span class="pk">Advertised services</span><span class="pv ok">${d.services.map(s => esc(s)).join(', ')}</span></div>`;
+  }
+
+  // Related issues
+  const related = (snap.issues || []).filter(i =>
+    (i.description && i.description.includes(d.ip)) ||
+    (d.duplicate_ip && i.id === 'duplicate_ip') ||
+    (d.status === 'lan_only' && i.id === 'devices_no_internet') ||
+    (d.rtt_ms > 50 && i.id === 'high_latency')
+  );
+  if (related.length > 0) {
+    html += section('Related Issues');
+    related.forEach(i => {
+      const icon = i.severity === 'error' ? '🔴' : i.severity === 'warning' ? '🟡' : 'ℹ️';
+      html += `<div class="pop-row" style="flex-direction:column;align-items:flex-start;gap:4px">
+        <span style="font-weight:600">${icon} ${esc(i.title)}</span>
+        <span style="color:var(--muted);font-size:0.8rem">${esc(i.suggestion || i.description)}</span>
+      </div>`;
+    });
+  }
+
+  document.getElementById('dev-pop-body').innerHTML = html;
+  document.getElementById('dev-backdrop').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function saveNickname(mac) {
+  if (!mac) return;
+  const input = document.getElementById('nick-input');
+  const nickname = input.value.trim();
+  fetch('/api/nicknames/' + encodeURIComponent(mac), {
+    method: 'PUT',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({nickname})
+  }).then(r => {
+    if (r.ok) {
+      input.style.borderColor = 'var(--green)';
+      setTimeout(() => { input.style.borderColor = ''; }, 1500);
+    }
+  });
+}
+
+function closeDevPopover(e) {
+  if (e && e.target !== document.getElementById('dev-backdrop')) return;
+  document.getElementById('dev-backdrop').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    closeDevPopover();
+    closeTopoFullscreen();
+  }
+});
+
+// ── LAN proof-of-locality ──────────────────────────────────────────────────
+function toggleLAN() {
+  const badge = document.getElementById('lan-badge');
+  if (badge.classList.contains('verified')) {
+    clearLAN();
+  } else {
+    proveLAN(true);
+  }
+}
+
+async function clearLAN() {
+  await fetch('/api/lan-logout').catch(() => {});
+  sessionStorage.removeItem('lan_reloaded');
+  sessionStorage.setItem('lan_suppressed', '1');
+  location.reload();
+}
+
+async function proveLAN(manual = false) {
+  const badge = document.getElementById('lan-badge');
+
+  // If user deliberately logged out, don't auto-re-verify.
+  // A manual click clears the suppression flag.
+  if (sessionStorage.getItem('lan_suppressed')) {
+    if (!manual) {
+      badge.textContent = '✗ LAN';
+      badge.className = 'failed';
+      return;
+    }
+    sessionStorage.removeItem('lan_suppressed');
+  }
+
+  // Quick check: if we already have a valid session, skip the challenge
+  try {
+    const probe = await fetch('/api/snapshot', { method: 'GET' });
+    if (probe.status === 200) {
+      badge.textContent = '✓ LAN';
+      badge.className = 'verified';
+      return;
+    }
+  } catch (_) {}
+
+  badge.textContent = '… LAN';
+  badge.className = '';
+  try {
+    const res = await fetch('/api/lan-challenge');
+    if (!res.ok) throw new Error('challenge request failed');
+    const { nonce, lan_url } = await res.json();
+    if (!nonce || !lan_url) throw new Error('bad challenge response');
+
+    // Hit LAN-only listener — browser blocks reading the response (no-cors)
+    // but the request reaches the server and marks the nonce verified.
+    fetch(lan_url, { mode: 'no-cors' }).catch(() => {});
+
+    // Poll status for up to 5 seconds. The status response sets the cookie.
+    const deadline = Date.now() + 5000;
+    while (Date.now() < deadline) {
+      await new Promise(r => setTimeout(r, 500));
+      const st = await fetch('/api/lan-challenge/' + nonce + '/status').then(r => r.json());
+      if (st.status === 'verified') {
+        badge.textContent = '✓ LAN';
+        badge.className = 'verified';
+        // Reload so protected endpoints (WebSocket, snapshot, etc.) connect
+        if (!sessionStorage.getItem('lan_reloaded')) {
+          sessionStorage.setItem('lan_reloaded', '1');
+          location.reload();
+        }
+        return;
+      }
+      if (st.status === 'expired') break;
+    }
+    throw new Error('not verified in time');
+  } catch (_) {
+    badge.textContent = '✗ LAN';
+    badge.className = 'failed';
+  }
 }
 
 // ── Init ───────────────────────────────────────────────────────────────────
-probeClient();
-setInterval(probeClient, 30000);
-connect();
-window.addEventListener('resize', drawGraph);
+if (!shareToken) {
+  runClientProbes();
+  setInterval(runClientProbes, 60000);
+  setInterval(() => { if (alertsVisible) fetchAlerts(); }, 15000);
+  proveLAN();
+}
+window.addEventListener('resize', () => { drawGraph(); drawUptimeTimeline(); if (lastSnapshot && topoVisible) drawTopology(lastSnapshot); });
 </script>
 </body>
 </html>
