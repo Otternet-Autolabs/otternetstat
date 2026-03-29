@@ -1589,6 +1589,9 @@ function toggleLAN() {
   const badge = document.getElementById('lan-badge');
   if (badge.classList.contains('verified')) {
     clearLAN();
+  } else if (location.protocol === 'https:' && sessionStorage.getItem('lan_local_url')) {
+    // On HTTPS we can't do the mixed-content LAN probe — redirect to LAN HTTP instead.
+    location.href = sessionStorage.getItem('lan_local_url');
   } else {
     proveLAN(true);
   }
@@ -1625,6 +1628,22 @@ async function proveLAN(manual = false) {
     }
   } catch (_) {}
 
+  // On HTTPS, skip straight to showing the redirect badge — mixed content
+  // blocks the LAN verify fetch anyway so there's no point running the flow.
+  if (location.protocol === 'https:' && !manual) {
+    badge.textContent = '✗ LAN';
+    badge.className = 'failed';
+    badge.title = 'Click to open on local network';
+    // Still fetch the challenge to learn the LAN IP for the redirect.
+    fetch('/api/lan-challenge').then(r => r.json()).then(({ lan_url }) => {
+      try {
+        const u = new URL(lan_url);
+        sessionStorage.setItem('lan_local_url', `http://${u.hostname}:${location.port || 8007}`);
+      } catch (_) {}
+    }).catch(() => {});
+    return;
+  }
+
   badge.textContent = '… LAN';
   badge.className = '';
   try {
@@ -1632,6 +1651,20 @@ async function proveLAN(manual = false) {
     if (!res.ok) throw new Error('challenge request failed');
     const { nonce, lan_url } = await res.json();
     if (!nonce || !lan_url) throw new Error('bad challenge response');
+
+    // On HTTPS the browser blocks mixed-content fetches to http://lan-ip:8008.
+    // Store the local HTTP URL and show a redirect badge instead.
+    if (location.protocol === 'https:') {
+      try {
+        const u = new URL(lan_url);
+        const localURL = `http://${u.hostname}:${location.port || 8007}`;
+        sessionStorage.setItem('lan_local_url', localURL);
+      } catch (_) {}
+      badge.textContent = '✗ LAN';
+      badge.className = 'failed';
+      badge.title = 'Click to open on local network';
+      return;
+    }
 
     // Hit LAN-only listener — browser blocks reading the response (no-cors)
     // but the request reaches the server and marks the nonce verified.
